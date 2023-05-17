@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>ToDo List</title>
+    <script src="main.js" async></script>
+    <link rel="shortcut icon" href="../images/table-check.png">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Yusei+Magic">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  </head>
+  <body>
+    <header>
+      <h1 class="page-name">
+        <i class="material-icons todo-logo">done_all</i>
+        ToDo List</h1>
+    </header>
+    <main>
+      <!-- Navigation -->
+      <nav class="nav">
+        <!-- Default projects-->
+        <div class="default-projects">
+          <button class="default-projects-button inbox-button">
+            <i class="material-icons inbox-logo">inbox</i>
+            Inbox
+          </button>
+          <button class="default-projects-button today-button">
+            <i class="material-icons today-logo">today</i>
+            Today
+          </button>
+          <button class="default-projects-button week-button">
+            <i class="material-icons week-logo">date_range</i>
+            This week
+          </button>
+        </div>
+        <!-- User projects-->
+        <h1 class="projects-name">Projects</h1>
+        <div class="projects-list"></div>
+        <button class="add-projects-button">
+          <i class="material-icons add-projects-logo">add</i>
+          Add Project
+        </button>
+        <div class="add-projects-popup">
+          <input class="add-projects-popup-input" type="text" required>
+          <div class="add-projects-popup-buttons">
+            <button class="add-projects-popup-button">Add</button>
+            <button class="cancel-projects-popup-button">Cancel</button>
+          </div>
+        </div>
+      </nav>
+      <div class="projects-preview"></div>
+    </main>
+  </body>
+</html>

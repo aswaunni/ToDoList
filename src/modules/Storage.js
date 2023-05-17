@@ -50,6 +50,12 @@ export default class Storage {
         Storage.saveTodoList(todoList);
     }
 
+    static clearCompletedTasks(projectName) {
+        const todoList = this.getTodoList();
+        todoList.getProject(projectName).clearCompletedTasks();
+        Storage.saveTodoList(todoList);
+    }
+
     static addTask(projectName, task) {
         const todoList = this.getTodoList();
         todoList.getProject(projectName).addTask(task);

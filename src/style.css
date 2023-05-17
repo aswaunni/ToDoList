@@ -290,11 +290,17 @@ nav.active {
     text-align: left;
   }
   
-  .add-tasks-button.active {
-    display: none;
+  .add-tasks-button:hover {
+    background-color: var(--secondary-light);
+  }
+
+  .clear-tasks-button {
+    padding-left: 15px;
+    margin-top: 10px;
+    text-align: left;
   }
   
-  .add-tasks-button:hover {
+  .clear-tasks-button:hover {
     background-color: var(--secondary-light);
   }
   
@@ -319,6 +325,17 @@ nav.active {
     align-items: center;
     justify-content: space-around;
     gap: 20px;
+  }
+
+  .task-control-buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    gap: 20px;
+  }
+  
+  .task-control-buttons.active {
+    display: none;
   }
   
   .add-tasks-popup-button {

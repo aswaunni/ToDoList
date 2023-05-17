@@ -60,10 +60,16 @@ export default class UI {
 
         if (projectName !== 'Today' && projectName !== 'This week') {
             projectsPreview.innerHTML += `
-                <button class="add-tasks-button">
-                    <i class="material-icons add-tasks-logo">add</i>
-                    Add Task
-                </button>
+                <div class="task-control-buttons">
+                    <button class="add-tasks-button">
+                        <i class="material-icons add-tasks-logo">add</i>
+                        Add Task
+                    </button>
+                    <button class="clear-tasks-button">
+                        <i class="material-icons clear-tasks-logo">clear_all</i>
+                        Clear Completed Tasks
+                    </button>
+                </div>
                 <div class="add-tasks-popup">
                     <input class="add-tasks-popup-input" type="text" required>
                     <input class="add-tasks-popup-input-date" type="date" required>
@@ -358,6 +364,7 @@ export default class UI {
     // Add Task button event handlers
     static initAddTaskButtons() {
         const addTaskButton = document.querySelector('.add-tasks-button')
+        const clearTasksButton = document.querySelector('.clear-tasks-button')
         const addTaskPopupButton = document.querySelector('.add-tasks-popup-button')
         const cancelTaskPopupButton = document.querySelector(
           '.cancel-tasks-popup-button'
@@ -365,18 +372,28 @@ export default class UI {
         const addTaskPopupInput = document.querySelector('.add-tasks-popup-input')
 
         addTaskButton.addEventListener('click', UI.openAddTaskPopup)
+        clearTasksButton.addEventListener('click', UI.clearCompletedTasks)
         addTaskPopupButton.addEventListener('click', UI.addTask)
         cancelTaskPopupButton.addEventListener('click', UI.closeAddTaskPopup)
         addTaskPopupInput.addEventListener('keypress', UI.handleAddTaskPopupInput)
     }
 
     static openAddTaskPopup() {
-        const addTaskButton = document.querySelector('.add-tasks-button')
+        const taskControlButtons = document.querySelector('.task-control-buttons')
         const addTaskPopup = document.querySelector('.add-tasks-popup')
 
         UI.closeAllPopups();
-        addTaskButton.classList.add('active')
+        taskControlButtons.classList.add('active')
         addTaskPopup.classList.add('active')
+    }
+
+    static clearCompletedTasks() {
+        const projectName = document.querySelector('.project-name').textContent
+
+        Storage.clearCompletedTasks(projectName)
+
+        UI.clearTasks()
+        UI.loadTasks(projectName)
     }
 
     static addTask() {
@@ -401,11 +418,11 @@ export default class UI {
     }
 
     static closeAddTaskPopup() {
-        const addTaskButton = document.querySelector('.add-tasks-button')
+        const taskControlButtons = document.querySelector('.task-control-buttons')
         const addTaskPopup = document.querySelector('.add-tasks-popup')
         const addTaskPopupInput = document.querySelector('.add-tasks-popup-input')
 
-        addTaskButton.classList.remove('active')
+        taskControlButtons.classList.remove('active')
         addTaskPopup.classList.remove('active')
         addTaskPopupInput.value = ''
     }

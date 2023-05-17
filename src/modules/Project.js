@@ -45,4 +45,8 @@ export default class Project {
         const taskToDelete = this.tasks.find((task) => taskName === task.name);
         this.tasks.splice(this.tasks.indexOf(taskToDelete), 1);
     }
+
+    clearCompletedTasks() {
+        this.tasks = this.tasks.filter((task) => task.status === false)
+    }
 }

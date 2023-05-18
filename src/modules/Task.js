@@ -27,5 +27,12 @@ export default class Task {
 
     setStatus(status) {
         this.status = status
-;    }
+    }
+
+    getDateFormatted() {
+        const day = this.date.split('/')[0]
+        const month = this.date.split('/')[1]
+        const year = this.date.split('/')[2]
+        return `${month}/${day}/${year}`
+      }
 }

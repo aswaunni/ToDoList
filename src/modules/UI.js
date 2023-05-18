@@ -1,6 +1,7 @@
 import Project from "./Project";
 import Storage from "./Storage";
 import Task from "./Task";
+import { format } from 'date-fns'
 
 export default class UI {
     // Loading content
@@ -8,6 +9,7 @@ export default class UI {
     static loadHomePage() {
         UI.loadProjects();
         UI.initProjectButtons();
+        UI.openProject('Inbox', document.querySelector('.inbox-button'))
     }
 
     static loadProjects() {
@@ -50,6 +52,11 @@ export default class UI {
     static clearTasks() {
         const tasksList = document.querySelector('.tasks-list');
         tasksList.innerHTML = '';
+    }
+
+    static clearProjectPreview() {
+        const projectPreview = document.querySelector('.projects-preview')
+        projectPreview.textContent = ''
     }
 
     static loadProjectContent(projectName) {
@@ -131,13 +138,30 @@ export default class UI {
     //Project button event listeners
     static initProjectButtons() {
         const inboxButton = document.querySelector('.inbox-button');
-        const todayButton = document.querySelector('today-button');
-        const weekButton = document.querySelector('week-button');
+        const todayButton = document.querySelector('.today-button');
+        const weekButton = document.querySelector('.week-button');
         const projectButtons = document.querySelectorAll('.project-button');
 
+        inboxButton.addEventListener('click', UI.openInboxTasks)
+        todayButton.addEventListener('click', UI.openTodayTasks)
+        weekButton.addEventListener('click', UI.openWeekTasks)
         projectButtons.forEach((button) => {
             button.addEventListener('click', UI.handleProjectButton)
         })
+    }
+
+    static openInboxTasks() {
+        UI.openProject('Inbox', this)
+    }
+
+    static openTodayTasks() {
+        Storage.updateTodayProject()
+        UI.openProject('Today', this)
+    }
+
+    static openWeekTasks() {
+        Storage.updateWeekProject()
+        UI.openProject('This week', this)
     }
 
     static handleProjectButton(e) {
@@ -164,7 +188,10 @@ export default class UI {
         UI.loadProjectContent(projectName)
     }
 
-    static deleteProject(projectName) {
+    static deleteProject(projectName, button) {
+        if (button.classList.contains('active'))
+            UI.clearProjectPreview()
+
         Storage.deleteProject(projectName);
         UI.clearProjects();
         UI.loadProjects();
@@ -200,6 +227,11 @@ export default class UI {
     static addProject() {
         const addProjectsPopupInput = document.querySelector('.add-projects-popup-input')
         const projectName = addProjectsPopupInput.value
+
+        if (projectName === '') {
+            alert('Project name cannot be empty')
+            return
+        }
 
         if (Storage.getTodoList().contains(projectName)) {
             addProjectsPopupInput.value = ''
@@ -401,16 +433,21 @@ export default class UI {
         const addTaskPopupInput = document.querySelector('.add-tasks-popup-input')
         const taskName = addTaskPopupInput.value
 
-        const addTaskPopupInputDate = document.querySelector('.add-tasks-popup-input-date')
-        let date = addTaskPopupInputDate.value
-
-        if (Storage.getTodoList().getProject(projectName).contains(taskName)) {
-            addTaskPopupInput.value = ''
-            alert('Project names must be different')
+        if (taskName === '') {
+            alert("Task name can't be empty")
             return
         }
 
-        date = (date === '' ? 'No date' : date)
+        if (Storage.getTodoList().getProject(projectName).contains(taskName)) {
+            addTaskPopupInput.value = ''
+            alert('Task names must be different')
+            return
+        }
+
+        const addTaskPopupInputDate = document.querySelector('.add-tasks-popup-input-date')
+        let date = addTaskPopupInputDate.value
+
+        date = (date === '' ? 'No date' : format(new Date(date), 'dd/MM/yyyy'))
         Storage.addTask(projectName, new Task(taskName, date))
         UI.createTask(taskName, date, false)
         UI.closeAddTaskPopup();
